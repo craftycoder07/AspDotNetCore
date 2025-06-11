@@ -1,0 +1,10 @@
+# This file is the top-most EditorConfig file
+root = true
+
+[*.cs]
+dotnet_diagnostic.IDE0005.severity = error
+dotnet_diagnostic.IDE0008.severity = error
+dotnet_diagnostic.IDE0044.severity = error
+dotnet_diagnostic.IDE0049.severity = error
+dotnet_diagnostic.IDE0055.severity = error
+dotnet_diagnostic.IDE0120.severity = error
