@@ -9,20 +9,36 @@ using Microsoft.AspNetCore.HttpLogging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//You can add services(classes required for your app) to your app  before calling Build() method on it.
+/*
+ * Essentially builder.Services is DI container.
+ * You can add services(classes required for your app) to your app  before calling Build() method on it.
+ * These services will be resolved automatically when required.
+ */
 builder.Services.AddHttpLogging(options =>
 {
     options.LoggingFields = HttpLoggingFields.All;
 });
 
+//After you call Build(), you can't register anymore services.
 var app = builder.Build();
 
+//By default, RoutingMiddleware is added at the start of the middleware pipeline.
+
 /*
- * After building WebApplication, developers can add middlewares to the WebApplication pipeline.
- * In middleware, developers can analyze and make change to HTTP request.
+ * WebApplication.Environment is set after Build() method is called.
+ * Environment exposes several properties like 'ContentRootPath', 'WebRootPath' & 'EnvironmentName'
+ * 'EnvironmentName' is set externally like Environment Variables.
  */
 if (app.Environment.IsDevelopment())
-    app.UseHttpLogging();
+{
+    /*
+     * After building WebApplication, developers can add middlewares to the WebApplication pipeline.
+     * In middleware, developers can analyze and make change to HTTP request (HttpContext object).
+     */
+    app.UseHttpLogging();   
+}
+
+//By default, EndpointMiddleware is added at the end of the middleware pipeline.
 
 /*
  * You can add endpoints to your app using Map* methods after middleware pipeline.
