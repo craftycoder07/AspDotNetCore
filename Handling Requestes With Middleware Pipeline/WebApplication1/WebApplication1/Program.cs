@@ -13,4 +13,12 @@ WebApplication app = builder.Build();
 app.UseWelcomePage("/");
 //app.UseMiddleware<WelcomePageMiddleware>();
 
+/*
+ * There is a middleware to serve static files as well (Images, Javascript, CSS etc.)
+ * For this one you need to have 'wwwroot' folder in your application.
+ * To access the file you have to use path /filename.extension
+ * If file is available, it will be served else client will get 404(not found) error
+ */
+app.UseStaticFiles();
+
 app.Run();
