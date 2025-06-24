@@ -21,4 +21,11 @@ app.MapPatch("/person", (Person person) => $"Hello {person.FirstName} {person.La
 //Http delete request. Used for 'DELETE' operation.
 app.MapDelete("/person/{id}", (int id) => $"Hello person with id={id} is deleted!");
 
+//Practice examples of HTTP request verbs
+app.MapPost("/fruit", (Fruit fruit) => FruitHandler.AddFruit(fruit));
+app.MapGet("/fruit", () => FruitHandler.GetFruits());
+app.MapGet("/fruit/{id}", (int id) => FruitHandler.GetFruit(id));
+app.MapDelete("/fruit/{id}", (int id) => FruitHandler.RemoveFruit(id));
+
+
 app.Run();
