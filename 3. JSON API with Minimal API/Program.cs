@@ -31,6 +31,7 @@ app.MapDelete("/person/{id}", (int id) => $"Hello person with id={id} is deleted
  * 4) IResult -> Manually send status codes with methods provided by their implementations. (Result & TypedResult). This is used to send mode descriptive status codes like NON-happy paths.
  * Result & TypedResult are static helper classes that provides static methods to return different status codes as per requirements.
  * Result returns IResult type whereas TypedResult returns actual type like OK<T>. Generic version is better for unit testing.
+ * In addition, Result has ProblemDetail and ValidationProblem methods as well which help unify API responses for error status code in terms of ProblemDetails which is a web standard.
  */
 app.MapGet("/fruit", () => FruitHandler.GetFruits().Any() ? Results.Ok(FruitHandler.GetFruits()) : Results.Problem(statusCode: 404)); //This is an example. Not an actual problem. Empty list can be sent.
 app.MapGet("/fruit/{id}", (int id) => FruitHandler.GetFruits().Any(x => x.Id == id) ? Results.Ok(FruitHandler.GetFruit(id)) : Results.Problem(statusCode:404, title:"Fruit not found", detail:"Fruit with given id is not found."));
