@@ -32,19 +32,33 @@ app.MapDelete("/person/{id}", (int id) => $"Hello person with id={id} is deleted
  * Result & TypedResult are static helper classes that provides static methods to return different status codes as per requirements.
  * Result returns IResult type whereas TypedResult returns actual type like OK<T>. Generic version is better for unit testing.
  */
-app.MapGet("/fruit", () => FruitHandler.GetFruits().Any() ? Results.Ok(FruitHandler.GetFruits()) : Results.NotFound());
-app.MapGet("/fruit/{id}", (int id) => FruitHandler.GetFruits().Any(x => x.Id == id) ? Results.Ok(FruitHandler.GetFruit(id)) : Results.NotFound());
-app.MapPost("/fruit", (Fruit fruit) => FruitHandler.AddFruit(fruit));
+app.MapGet("/fruit", () => FruitHandler.GetFruits().Any() ? Results.Ok(FruitHandler.GetFruits()) : Results.Problem(statusCode: 404)); //This is an example. Not an actual problem. Empty list can be sent.
+app.MapGet("/fruit/{id}", (int id) => FruitHandler.GetFruits().Any(x => x.Id == id) ? Results.Ok(FruitHandler.GetFruit(id)) : Results.Problem(statusCode:404, title:"Fruit not found", detail:"Fruit with given id is not found."));
+app.MapPost("/fruit", (Fruit fruit) =>
+{
+    if (FruitHandler.GetFruits().Any(x => x.Id == fruit.Id))
+    {
+        return Results.ValidationProblem(new Dictionary<string, string[]>
+        {
+            { "id", new[] { "A fruit with this id already exists" } }
+        });
+    }
+    else
+    {
+        FruitHandler.AddFruit(fruit);
+        return Results.Created();
+    }
+});
 app.MapDelete("/fruit/{id}", (int id) =>
 {
     if (FruitHandler.GetFruits().Any(x => x.Id == id))
     {
         FruitHandler.RemoveFruit(id);
-        Results.Ok();
+        return Results.Ok();
     }
     else
     {
-        Results.NotFound();
+        return Results.Problem(statusCode: 404, title: "Fruit not found", detail: "Fruit with given id is not found.");
     }
 });
 
