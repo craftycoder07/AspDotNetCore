@@ -1,7 +1,19 @@
 using WebApplication1;
 
 var builder = WebApplication.CreateBuilder(args);
+//To convert failed responses to ProblemDetails
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
+
+//If you use 'AddProblemDetails', exception related middlewares automatically converts responses to ProblemDetails
+if (!app.Environment.IsDevelopment())
+{ 
+    app.UseExceptionHandler();
+}
+
+//This will convert failed response statues to ProblemDetails. (This does not handle exceptions) 
+app.UseStatusCodePages();
 
 //Parameterized routes
 app.MapGet("/firstname/{firstName}", (string firstName) => $"Hello {firstName}!");
@@ -63,5 +75,9 @@ app.MapDelete("/fruit/{id}", (int id) =>
     }
 });
 
+app.MapGet("/Employee", () =>
+{
+    throw new Exception();
+});
 
 app.Run();
