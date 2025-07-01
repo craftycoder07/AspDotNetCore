@@ -22,6 +22,7 @@ var app = builder.Build();
 
 app.UseRouting();
 
+
 /* ************************
  * SIMPLE ROUTE TEMPLATE SYNTAX
  * Route Templates consists of 'Segments'.
@@ -31,5 +32,26 @@ app.UseRouting();
  * In following example 'product' is literal while 'category' and 'name' are 'Parameter' (required) segment
  */
 app.MapGet("/product/{category}/{name}", () => "Hello World!");
+
+
+/* ***********************
+ * ADDING DEFAULT PARAMETERS TO ROUTE TEMPLATE
+ * You define 'Default' parameter with '=' with default value. If user don't pass any value, default value is taken.
+ * Route parameter '/product' and '/product/all' will point to same handler.
+ */
+app.MapGet("/product/{name=all}", () => "Hello World!");
+
+/* ***********************
+ * ADDING OPTIONAL PARAMETERS TO ROUTE TEMPLATE
+ * You define 'Optional' parameter with '?' with optional value. If user don't pass any value, value of the parameter will be null.
+ */
+app.MapGet("/product/grocery/{id?}", () => "Hello World!");
+
+/* ***********************
+ * COMBINE DEFAULT AND OPTIONAL PARAMETER
+ * You can combine 'Default' & 'Optional' parameter but optional parameter has to be the last one.
+ * Plus default parameter needs to be passed if used wants to pass optional parameter.
+ */
+app.MapGet("/product/stationary/{name=all}/{id?}", () => "Hello World!");
 
 app.Run();
