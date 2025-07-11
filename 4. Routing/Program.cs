@@ -54,4 +54,9 @@ app.MapGet("/product/grocery/{id?}", () => "Hello World!");
  */
 app.MapGet("/product/stationary/{name=all}/{id?}", () => "Hello World!");
 
+/*
+ * ***********************
+ * INTENTIONALLY LEFT FOR 'ROUTE CONSTRAINTS', 'CATCH-ALL PARAMETER' AND OTHER ADVANCED ROUTING TOPICS
+ */
+
 app.Run();
