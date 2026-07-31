@@ -10,16 +10,25 @@ using Microsoft.AspNetCore.HttpLogging;
 var builder = WebApplication.CreateBuilder(args);
 
 /*
- * Essentially builder.Services is DI container.
- * You can add services(classes required for your app) to your app  before calling Build() method on it.
+ * Essentially builder.Services(IServiceCollection) is a place where developers register their services/classes for DI.
+ * You can add services(classes required for your app) to your app before calling Build() method on it, because once you call build, DI gets constructed, you can't register more services. 
  * These services will be resolved automatically when required.
+ */
+/*
+ * WHY USE DELEGATES IN EXTENSION METHODS RATHER THAN C# OBJECT (In this case HttpLoggingOptions)?
+ * 1) If developers have to pass C# objects, that means they are manually constructing that object. This defeats the purpose of DI.
+ * 2) If the intended C# object has other dependencies, developers can't use DI container(as it is not constructed yet) to resolve those dependencies and they will have to manually construct those dependencies as well.
  */
 builder.Services.AddHttpLogging(options =>
 {
     options.LoggingFields = HttpLoggingFields.All;
 });
 
-//After you call Build(), you can't register anymore services.
+/*
+ * After you call Build(), you can't register anymore services.
+ * This is the point where DI container is actually created.
+ * From here on framework knows how to construct each service/classes from their dependencies.
+ */
 var app = builder.Build();
 
 //By default, RoutingMiddleware is added at the start of the middleware pipeline.
